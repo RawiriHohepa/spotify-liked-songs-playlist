@@ -1,5 +1,8 @@
 require("dotenv").config();
 const { SpotifyApi } = require("@spotify/web-api-ts-sdk");
+const { differenceInMonths } = require("date-fns");
+
+const monthsDiffCutoff = 9;
 
 const refreshAccessToken = async () => {
   const url = "https://accounts.spotify.com/api/token";
@@ -42,6 +45,19 @@ const getSavedTracks = async (sdk) => {
   const sdk = SpotifyApi.withAccessToken(process.env.CLIENT_ID, accessToken);
 
   const savedTracks = await getSavedTracks(sdk);
-  console.log(savedTracks);
-  console.log(savedTracks.length);
+  // console.log(savedTracks);
+  // console.log(savedTracks.length);
+  // console.log(savedTracks[savedTracks.length - 1]);
+
+  const tracksToRemove = savedTracks.filter((track) => {
+    const addedAt = new Date(track.added_at);
+    const now = new Date();
+    const monthsDiff = differenceInMonths(now, addedAt);
+    return monthsDiff >= monthsDiffCutoff;
+  });
+  tracksToRemove.reverse();
+  // console.log(tracksToRemove);
+  // console.log(tracksToRemove.length);
+  // console.log(tracksToRemove[0]);
+  // console.log(tracksToRemove[tracksToRemove.length - 1]);
 })();
