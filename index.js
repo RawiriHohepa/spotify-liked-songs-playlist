@@ -2,6 +2,24 @@ require("dotenv").config();
 const { SpotifyApi } = require("@spotify/web-api-ts-sdk");
 const { getYear } = require("date-fns");
 
+const envKeys = [
+  "CLIENT_ID",
+  "CLIENT_SECRET",
+  "REFRESH_TOKEN",
+  "YEAR",
+  "PLAYLIST_ID",
+];
+let envKeyMissing = false;
+envKeys.forEach((envKey) => {
+  if (!process.env[envKey]) {
+    console.error(`ERROR: missing .env key ${envKey}`);
+    envKeyMissing = true;
+  }
+});
+if (envKeyMissing) {
+  return;
+}
+
 const refreshAccessToken = async () => {
   const url = "https://accounts.spotify.com/api/token";
   const payload = {
