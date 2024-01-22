@@ -23,10 +23,25 @@ const refreshAccessToken = async () => {
   return await response.json();
 };
 
+const getSavedTracks = async (sdk) => {
+  const savedTracks = [];
+  const limit = 50;
+  let currentTracks = null;
+  let currentOffset = 0;
+  do {
+    currentTracks = await sdk.currentUser.tracks.savedTracks(50, currentOffset);
+    savedTracks.push(...currentTracks.items);
+    currentOffset = currentTracks.offset + limit;
+  } while (currentTracks.next !== null);
+
+  return savedTracks;
+};
+
 (async () => {
   const accessToken = await refreshAccessToken();
   const sdk = SpotifyApi.withAccessToken(process.env.CLIENT_ID, accessToken);
 
-  const user = await sdk.currentUser.profile();
-  console.log(user);
+  const savedTracks = await getSavedTracks(sdk);
+  console.log(savedTracks);
+  console.log(savedTracks.length);
 })();
