@@ -64,29 +64,49 @@ const getSavedTracks = async (sdk) => {
   // console.log(savedTracks);
   // console.log(savedTracks.length);
 
-  const tracksToAdd = savedTracks.filter((track) => {
+  let tracksToAdd = savedTracks.filter((track) => {
     const addedAt = new Date(track.added_at);
     const addedAtYear = getYear(addedAt);
     return addedAtYear.toString() === process.env.YEAR;
   });
   tracksToAdd.reverse();
+  // tracksToAdd = [tracksToAdd[0], tracksToAdd[1]];
   // console.log(tracksToAdd);
   // console.log(tracksToAdd.length);
   // console.log(tracksToAdd[0]);
 
-  const urisToAdd = tracksToAdd.map((track) => track.track.uri);
-  // const urisToAdd = [tracksToAdd[0].track.uri, tracksToAdd[1].track.uri];
+  const urisToAdd = tracksToAdd.map(track => track.track.uri);
   // console.log(urisToAdd);
-  // console.log(urisToAdd.length);
-  while (urisToAdd.length) {
-    const urisToAddSpliced = urisToAdd.splice(0, 100);
-    console.log(urisToAddSpliced.length);
-    // console.log(urisToAddSpliced[0]);
+  console.log(urisToAdd.length);
+  // console.log(urisToAdd[0]);
 
-    // UNCOMMENT WHEN READY
-    // await sdk.playlists.addItemsToPlaylist(
-    //   process.env.PLAYLIST_ID,
-    //   urisToAddSpliced
-    // );
-  }
+  // // UNCOMMENT TO ADD TO PLAYLIST
+  // while (urisToAdd.length) {
+  //   const urisToAddSpliced = urisToAdd.splice(0, 100);
+  //   // console.log(urisToAddSpliced);
+  //   console.log(urisToAddSpliced.length);
+  //   // console.log(urisToAddSpliced[0]);
+
+  //   // UNCOMMENT WHEN READY
+  //   // await sdk.playlists.addItemsToPlaylist(
+  //   //   process.env.PLAYLIST_ID,
+  //   //   urisToAddSpliced
+  //   // );
+  // }
+
+  // // UNCOMMENT TO REMOVE FROM LIKED SONGS
+  // const idsToRemove = tracksToAdd.map(track => track.track.id);
+  // // console.log(idsToRemove);
+  // // console.log(idsToRemove.length);
+  // // console.log(idsToRemove[0]);
+
+  // while (idsToRemove.length) {
+  //   const idsToRemoveSpliced = idsToRemove.splice(0, 50);
+  //   // console.log(idsToRemoveSpliced);
+  //   console.log(idsToRemoveSpliced.length);
+  //   // console.log(idsToRemoveSpliced[0]);
+
+  //   // UNCOMMENT WHEN READY
+  //   // await sdk.currentUser.tracks.removeSavedTracks({ ids: idsToRemoveSpliced });
+  // }
 })();
